@@ -115,9 +115,9 @@ class Core():
 
             if email_title_location:
                 # Depending on supported origins, this may not apply to all
-                return self.format_title(email_title_location.text.split(' in ')[1].strip('"'))
+                return Globals.SUPPORTED_FULL_NAMES[origin] + " - " + self.format_title(email_title_location.text.split(' in ')[1].strip('"'))
             else: 
-                return ""
+                return Globals.SUPPORTED_FULL_NAMES[origin]
 
 
     # Makes the first letter of every word upper-case

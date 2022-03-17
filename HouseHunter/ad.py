@@ -51,8 +51,6 @@ class RewAd():
         self.__locate_info()
         self.__parse_info()
 
-        print(self.info)
-
     def __locate_info(self):
         # Locate ad information
         self.info["Title"] = self.title
