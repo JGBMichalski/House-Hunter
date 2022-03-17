@@ -1,0 +1,35 @@
+name: Docker Image
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: | 
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Set variables
+      run: |
+        VER=$(cat VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag jgbmichalski/house-hunter:latest --tag jgbmichalski/house-hunter:${{ env.VERSION }}
+    
+    - name: Docker Push Latest
+      run: docker push ${{secrets.DOCKER_USER}}/house-hunter:latest
+
+    - name: Docker Push Version
+      run: docker push ${{secrets.DOCKER_USER}}/house-hunter:${{ env.VERSION }}
